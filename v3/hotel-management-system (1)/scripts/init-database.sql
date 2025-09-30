@@ -1,32 +1,33 @@
--- Initialize hotel management database tables
-
--- Users table for authentication
+-- Users table
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL
 );
 
--- Rooms table
+-- Room types table
+CREATE TABLE IF NOT EXISTS room_types (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type_name TEXT NOT NULL,   -- e.g. "Luxury", "Normal"
+    bhk TEXT NOT NULL,         -- e.g. "2 BHK", "3 BHK"
+    price_per_night REAL NOT NULL
+);
+
+-- Rooms table (linked to room_types)
 CREATE TABLE IF NOT EXISTS rooms (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    room_number TEXT UNIQUE NOT NULL
+    room_number TEXT UNIQUE NOT NULL,
+    room_type_id INTEGER NOT NULL,
+    FOREIGN KEY (room_type_id) REFERENCES room_types(id)
 );
 
 -- Bookings table
 CREATE TABLE IF NOT EXISTS bookings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     guest_name TEXT NOT NULL,
-    room_number TEXT NOT NULL,
+    room_id INTEGER NOT NULL,
     check_in DATE NOT NULL,
     check_out DATE NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (room_id) REFERENCES rooms(id)
 );
-
--- Insert demo user (password: 'password')
-INSERT OR IGNORE INTO users (username, password_hash) 
-VALUES ('admin', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
-
--- Insert sample rooms
-INSERT OR IGNORE INTO rooms (room_number) VALUES 
-('101'), ('102'), ('103'), ('201'), ('202'), ('203'), ('301'), ('302'), ('303');
