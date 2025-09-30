@@ -7,6 +7,16 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash TEXT NOT NULL
 );
 
+
+-- Rooms type
+CREATE TABLE IF NOT EXISTS room_types (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type_name TEXT NOT NULL,  -- e.g. "Luxury", "Normal"
+    bhk TEXT NOT NULL,        -- e.g. "2 BHK", "3 BHK"
+    price_per_night REAL NOT NULL
+);
+
+
 -- Rooms table
 CREATE TABLE IF NOT EXISTS rooms (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
